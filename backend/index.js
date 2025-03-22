@@ -2,8 +2,12 @@ import express from "express"
 import dotenv from "dotenv";
 import bodyParser from "body-parser"
 import connectDB from "./db.js";
-// import book_data from "./model/bookmodel.js"
-import router from "./route/user.js";
+import {book,book1} from "./route/book.js"
+import fav from "./route/faviourite.js"
+import cart_route from "./route/cart.js";
+import order_route from "./route/order.js"
+
+import router from "./route/user_credentials.js";
 const app=express();
 dotenv.config();
 
@@ -17,6 +21,13 @@ app.get("/",(req,res)=>{
     // console.log("welcome to book store app");
 })
 app.use("/api",router);
+app.use("/api",book);
+app.use("/api",book1);
+app.use("/api",fav);
+app.use("/api",cart_route);
+app.use("/api",order_route);
+
+
 
 app.listen(port,()=>{
     console.log(`server connected successfully at port ${port}`)

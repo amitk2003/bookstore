@@ -12,7 +12,7 @@ const connectDB= async()=>{
             useNewUrlParser:true,
             UseUnifiedTopology :true,
         });
-        console.log("mongo db connected successfully",MONGO_URL);
+        console.log("mongo db connected successfully");
 
     }catch(error){
         console.error('error in connecting database to mongo db for fetching data ',error);

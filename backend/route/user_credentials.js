@@ -46,7 +46,7 @@ try{
     console.error("Internal server error");
 }
 });
-router.post("/Login",async(req,res)=>{
+router.post("/login",async(req,res)=>{
     try{
         const {Username,password}=req.body;
         const ExistingUser= await User.findOne({Username});
@@ -96,6 +96,36 @@ router.put("/update-Address",authToken,async(req,res)=>{
     } catch (error) {
         res.status(500).json({message:"Internal server error"}); 
     }
+})
+router.put("/update-Email",authToken,async(req,res)=>{
+    try{
+        const {id}=req.headers;
+        const {Email}=req.body;
+        await User.findByIdAndUpdate(id,{Email:Email});
+        return res.status(200).json({message:"email updated successfully"});
+
+    }catch(error){
+        res.status(500).json({message:"internal server error"})
+    }
+})
+router.put("/forget-password",authToken,async(req,res)=>{
+    try{
+        const {id}=req.headers;
+        const {new_password}=req.body;
+        if(new_password.length<5){
+            return res.status(400).json({message:"password length is not sufficent"})
+        }
+
+        const hashedPassword=await bcrypt.hash(new_password,10);
+
+        //
+        await User.findByIdAndUpdate(id,{password:hashedPassword});
+        return res.status(200).json({message:"password updated successfully"});
+
+    }catch(error){
+        res.status(500).json({message:"internal server error"})
+    }
+
 })
 
 export default router;

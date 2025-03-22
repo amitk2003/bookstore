@@ -21,5 +21,5 @@ const order= new mongoose.Schema({
 },
 { timestamps: true}
 );
-const orders=mongoose.model("order",order)
+const orders=mongoose.model('order',order)
 export default orders;

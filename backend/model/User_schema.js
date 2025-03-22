@@ -14,6 +14,14 @@ const user= new mongoose.Schema({
         type:String,
         required:true,
     },
+    // if you want to update password via email
+    resetPasswordToken: {
+        type: String,
+    },
+    resetPasswordExpires: {
+        type: Date,
+    },
+    
     address:{
         type:String,
         required:true,
@@ -46,5 +54,5 @@ const user= new mongoose.Schema({
 },
 {timestamps:true}
 );
-const User=mongoose.model("user",user)
+const User=mongoose.model('user_data',user,'user_data')
 export default User;
