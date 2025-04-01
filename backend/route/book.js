@@ -121,7 +121,7 @@ book1.get("/get-all",async(req,res)=>{
 book1.get("/get-recent-book",async(req,res)=>{
     // reason to add all books
     try{
-     const books=await bookinfo.find().sort({createdAt: -1}).limit(6);
+     const books=await bookinfo.find().sort({createdAt: -1}).limit(4);
     return res.json({ status:"success", data:books});
  
     }catch(error){
