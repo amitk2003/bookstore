@@ -6,7 +6,7 @@ const Bookcard = ({book}) => {
     <>
     <Link to={`/view-book-details/${book._id}`}>
     {/* i want that data inside col should return  column wisse not row wise */}
-    <div className='bg-zinc-800 rounded p-4 flex flex-col h-[55vh]  w-full'>
+    <div className='bg-zinc-800 rounded p-4 flex flex-col h-[55vh] sm:h-[70vh] sm:w-[180%]  w-full'>
       <div className='bg-zinc-900 rounded flex items-center justify-center'>
         <img src={book.url} alt="/" className='h-[20vh] '/>
       </div>

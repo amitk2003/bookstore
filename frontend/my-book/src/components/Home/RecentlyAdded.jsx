@@ -16,7 +16,7 @@ export default function RecentlyAdded() {
   fetch();
   },[])
   return (
-    <div className='mt-10 px-4'>
+    <div className='mt-10 px-4 '>
       <h4 className='text-3xl flex-start  text-yellow-100'>Recently Added Books</h4>
       {!book && (
         <div className='flex items-center justify-center'>

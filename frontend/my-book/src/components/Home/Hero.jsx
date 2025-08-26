@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export default function Hero() {
   return (
-    <div className="h-[100vh] flex flex-col md:flex-row w-full overflow-hidden">
+    <div className="h-[100vh] flex flex-col md:flex-row w-[100%] overflow:hidden">
       
       {/* Text Section */}
       <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start justify-center px-6 lg:px-12 py-10">
@@ -24,7 +24,7 @@ export default function Hero() {
       </div>
 
       {/* Image Section */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center">
+      <div className="w-full   lg:w-1/2 flex items-center justify-center">
         <img 
           src={heroImage} 
           alt="hero" 

@@ -10,16 +10,19 @@ const router=express.Router();
 router.post("/sign-up",async(req,res)=>{
 try{
     const {Username,Email,password,address}=req.body;
+     if (!Username || !Email || !password || !address) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
     if(Username.length<4){
         return res.status(400).json({message:"Username length should be greater than 4"});
     }
     // 
-    const existingUser= await User.findOne({Username:Username});
+    const existingUser= await User.findOne({Username});
     // Username:Username ,Username  compares name from database whether user is already taken or not
     if(existingUser){ 
         return res.status(400).json({message:"Username already exists"});
     }
-    const existingEmail= await User.findOne({Email:Email});
+    const existingEmail= await User.findOne({Email});
     // Username:Username ,Username  compares name from database whether user is already taken or not
     if(existingEmail){
          return res.status(400).json({message:"Email already exists"});
@@ -39,39 +42,51 @@ try{
     });
     await NewUser.save();
     res.status(200).json({message:"Sign UP Successfully"});
+   
     console.log(NewUser);
 
 }catch(error){
-    res.status(500).json({message:"Internal server error"});
-    console.error("Internal server error");
+    res.status(500).json({success:"false",error:"Error during sign up"});
+    console.error("Internal server error",error);
 }
 });
-router.post("/login",async(req,res)=>{
-    try{
-        const {Username,password}=req.body;
-        const ExistingUser= await User.findOne({Username});
-        if(!ExistingUser){
-            res.status(400).json({message:"Invalid credentials"});
-        }
-        await bcrypt.compare(password,ExistingUser.password,(err,data)=>{
-            const authClaims=[{
-                name:ExistingUser.Username},
-                {role:ExistingUser.role},
-            ]
-            if(data){
-                const token=jwt.sign({authClaims},"bookstore234",{expiresIn:"30d"})
-                res.status(200).json({id:ExistingUser._id,role:ExistingUser.role,token:token});
-                console.log(authClaims);
-            }
-            else{
-                res.status(400).json({message:"Invalid credentials"});
-            }
-        })
-    }catch(error){
-        res.status(500).json({message:"Internal server error"});
-        console.error("Internal server error");
+router.post("/login", async (req, res) => {
+  try {
+    const { Username, password } = req.body;
+
+    const ExistingUser = await User.findOne({ Username });
+
+    if (!ExistingUser) {
+      return res.status(400).json({ message: "Invalid credentials" });
     }
-    });
+
+    const isMatch = await bcrypt.compare(password, ExistingUser.password);
+
+    if (isMatch) {
+      const authClaims = [
+        { name: ExistingUser.Username },
+        { role: ExistingUser.role },
+      ];
+
+      const token = jwt.sign({ authClaims }, "bookstore234", {
+        expiresIn: "30d",
+      });
+
+      console.log(authClaims);
+      return res
+        .status(200)
+        .json({ id: ExistingUser._id, role: ExistingUser.role, token: token });
+    } else {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+  } catch (error) {
+    console.error("Internal server error", error);
+    return res
+      .status(500)
+      .json({ success: false, error: "Error during login" });
+  }
+});
+
 // use of auth token to get user data
 router.get("/get-userInfo",authToken,async(req,res)=>{
     try {

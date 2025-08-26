@@ -9,7 +9,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-zinc-600 text-white py-6 w-full text-center mt-20 ">
+    <footer className="bg-zinc-600 text-white py-6 w-full text-center">
       <div className="container mx-auto">
         <h1 className="text-2xl font-semibold">© {year} Amit Kumar, All rights reserved</h1>
         <div className="mt-4 flex justify-center space-x-4">
