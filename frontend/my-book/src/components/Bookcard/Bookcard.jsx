@@ -1,24 +1,33 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
-const Bookcard = ({book}) => {
-    console.log(book);
+import { Link } from 'react-router-dom'
+
+const Bookcard = ({ book }) => {
   return (
-    <>
     <Link to={`/view-book-details/${book._id}`}>
-    {/* i want that data inside col should return  column wisse not row wise */}
-    <div className='bg-zinc-800 rounded p-4 flex flex-col h-[55vh] sm:h-[70vh] sm:w-[180%]  w-full'>
-      <div className='bg-zinc-900 rounded flex items-center justify-center'>
-        <img src={book.url} alt="/" className='h-[20vh] '/>
+      <div className="bg-zinc-700 rounded p-5 flex flex-col h-[50vh] sm:h-[60vh] w-full max-w-xs mx-auto">
+        {/* Image */}
+        <div className="bg-zinc-600 rounded flex items-center justify-center">
+          <img
+            src={book.url}
+            alt={book.title}
+            className="h-[20vh] w-full object-cover rounded"
+          />
+        </div>
+
+        {/* Title */}
+        <h2 className="mt-4 text-lg text-zinc-300 font-semibold truncate">
+          {book.title}
+        </h2>
+
+        {/* Author */}
+        <p className="mt-2 text-zinc-400">by {book.author}</p>
+
+        {/* Price */}
+        <p className="mt-2 text-zinc-200 font-semibold text-lg">
+          {book.price}₹
+        </p>
       </div>
-      <h2 className='mt-4 text-xl text-zinc-300 font-semibold'>{book.title}</h2>
-      <p className='mt-2 text-zinc-400 font-semibold'>by {book.author}</p>
-      <p className='mt-2 text-zinc-200 font-semibold text-xl'> {book.price}₹</p>
-    </div>
-    
     </Link>
-     
-    </>
-   
   )
 }
 

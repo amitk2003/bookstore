@@ -1,57 +1,79 @@
-import express from 'express'
-import User from '../model/User_schema.js';
-import authToken from './userAuthtoken.js';
+import express from "express";
+import User from "../model/User_schema.js";
+import authToken from "./userAuthtoken.js";
+
 const cart_route = express.Router();
-// now we need to buy book means adding book to cart only when user auth token realy exist  
-// like favourite route here also we need : which book we are adding means bookid  and id 
-cart_route.put("/add-to-cart",authToken, async(req,res)=>{
-    try {
-        const {bookid,id}=req.headers;
-        const userdata= await User.findById(id);
-        // we will not add same book multiple times, need to make sure that add to favourite only 1 time
-        const isBookInCart= userdata.cart.includes(bookid);
-        if(isBookInCart) return res.status(200).json({message:"book is already added to cart"});
-        await User.findByIdAndUpdate(id,{$push:{cart:bookid}})
-        return res.status(200).json({message:"book added to cart"});
-    } catch (error) {
-        res.status(500).json({message:"Internal server error"});
-        
+
+// ➤ Add book to cart
+cart_route.put("/add-to-cart", authToken, async (req, res) => {
+  try {
+    const { bookid } = req.body; // bookid should come from body now
+    const userId = req.user.id;  // extracted from token by authToken
+
+    const userdata = await User.findById(userId);
+
+    if (!userdata) {
+      return res.status(404).json({ message: "User not found" });
     }
-})
-// remove book from cart its not delete from datbase but removedfrom current cart
-cart_route.put("/remove-book-from-add-to-cart/:bookid",authToken,async(req,res)=>{
-    try {
-        const { bookid }=req.params;
-        const { id }=req.headers;
-        const userdata= await User.findById(id);
-        // we will not add same book multiple times, need to make sure that add to favourite only 1 time
-        const isBookInCart= userdata.cart.includes(bookid);
-        if(isBookInCart) {
-            await User.findByIdAndUpdate(id,{$pull:{cart:bookid}});
-        }
-        
-        return res.status(200).json({message:"book remove from cart"});
-    } catch (error) {
-        res.status(500).json({message:"Internal server error"});
-        
+
+    // avoid duplicates
+    const isBookInCart = userdata.cart.includes(bookid);
+    if (isBookInCart) {
+      return res.status(200).json({ message: "Book is already in cart" });
     }
+
+    await User.findByIdAndUpdate(userId, { $push: { cart: bookid } });
+    return res.status(200).json({ message: "Book added to cart" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
-// get cart of particular user
-cart_route.get("/get-user-cart", authToken, async(req,res)=>{
-    try {
-        
-    const {id }=req.headers;
-    const userData = await User.findById(id).populate("cart");
-    const cart_data=userData.cart.reverse();
-    // reverse is used  to get latest books  in cart
-    return res.json({
-        status:"success",
-        data:cart_data,
-    })
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message:"an error occured"});
+
+// ➤ Remove book from cart
+cart_route.put("/remove-book-from-cart/:bookid", authToken, async (req, res) => {
+  try {
+    const { bookid } = req.params;
+    const userId = req.user.id;
+
+    const userdata = await User.findById(userId);
+
+    if (!userdata) {
+      return res.status(404).json({ message: "User not found" });
     }
-    
-})
+
+    const isBookInCart = userdata.cart.includes(bookid);
+    if (isBookInCart) {
+      await User.findByIdAndUpdate(userId, { $pull: { cart: bookid } });
+    }
+
+    return res.status(200).json({ message: "Book removed from cart" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// ➤ Get user cart
+cart_route.get("/get-user-cart", authToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const userData = await User.findById(userId).populate("cart");
+    console.log(userId,userData);
+
+    if (!userData) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const cart_data = userData.cart.reverse(); // latest first
+    return res.json({
+      status: "success",
+      data: cart_data,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "An error occurred" });
+  }
+});
+
 export default cart_route;

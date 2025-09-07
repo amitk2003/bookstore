@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 
 export default function Navbar() {
-  const [MobileNav, setMobileNav] = useState(false); // ✅ Use Boolean for Toggle
+  const [MobileNav, setMobileNav] =useState(false); // ✅ Use Boolean for Toggle
 
   const links = [
     { title: "Home", link: "/" },
@@ -38,7 +38,7 @@ export default function Navbar() {
             // <Link key={i} to={item.link} className="hover:text-blue-500 transition-all duration-300">
             //   {item.title}
             // </Link>
-           <div className="flex items-center">
+           <div className="flex items-center" key={i}>
            {item.title==="Profile" ?(
             <Link to={item.link} className="px-4 py-1 border border-blue-500 rounded hover:text-zinc-500  transition-all duration-300" key={i}>{item.title}</Link>):
             (

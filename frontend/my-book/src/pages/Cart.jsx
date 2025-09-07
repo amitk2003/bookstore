@@ -14,9 +14,10 @@ export default function Cart() {
       try {
         const response=await axios.get("http://localhost:3000/api/get-user-cart",{headers});
         console.log(response.data);
-        setCart(response.data)
+        setCart(response.data.data)
       } catch (error) {
-        res.status(500).json({message:"Internal server error"});
+        console.log(error);
+        alert("Something went wrong");
       }
     }
     fetchCart()
@@ -26,7 +27,7 @@ export default function Cart() {
     {!cart && <Loader/>}
     {/* if length is 0 means array is empty */}
     {cart.length==0 && (
-      <div className="h-screen">
+      <div className='h-screen px-12 py-8 bg-zinc-800'>
         <div className='h-[100%] flex items-center justify-center flex-col'>
           <h1 className='text-5xl lg:text-6xl font-semibold text-zinc-400'>
             Empty Cart
@@ -36,10 +37,10 @@ export default function Cart() {
       </div>
     )}
     {cart && cart.length>0 && (<>
-    <h1 className="text-5xl font-semibold text-zinc mb-8">My Cart</h1>
-    {cart.map((item,i)=>{
+    <h1 className='text-5xl font-semibold text-zinc-500 mb-8'>My Cart</h1>
+    {cart.map((item,i)=>(
     <div className="w-full my-4 rounded flex flex-col md:flex-row p-4 bg-zinc-800 justify-between items-center" key={i}>
-      <img src={item.url} alt="book image" className='h-[20vh] md:h-[10vh] object-cover' />
+      <img src={item.url} alt="book image" className='h-[15vh] w-3xs md:h-[10vh] object-contain' />
       <div className='w-full md:w-auto'>
         <h1 className="text-2xl text-zinc-100 font-semibold text-start mt-2 md:mt-0">{item.title}</h1>
         <p className="text-normal text-zinc-300 mt-2 hidden lg:block">{item.desc.slice(0,100)}</p>
@@ -48,7 +49,7 @@ export default function Cart() {
       </div>
     </div>  
    
-    })}
+    ))}
     </>)}
     </>
     

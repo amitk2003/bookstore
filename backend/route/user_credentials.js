@@ -62,28 +62,27 @@ router.post("/login", async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, ExistingUser.password);
 
-    if (isMatch) {
-      const authClaims = [
-        { name: ExistingUser.Username },
-        { role: ExistingUser.role },
-      ];
-
-      const token = jwt.sign({ authClaims }, "bookstore234", {
-        expiresIn: "30d",
-      });
-
-      console.log(authClaims);
-      return res
-        .status(200)
-        .json({ id: ExistingUser._id, role: ExistingUser.role, token: token });
-    } else {
+     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+
+    // Payload should include the user's ID
+    const payload = {
+      id: ExistingUser._id,
+      username: ExistingUser.Username,
+      role: ExistingUser.role,
+    };
+
+    const token = jwt.sign(payload, "bookstore234", { expiresIn: "100d" });
+
+    return res.status(200).json({
+      id: ExistingUser._id,
+      role: ExistingUser.role,
+      token: token,
+    });
   } catch (error) {
     console.error("Internal server error", error);
-    return res
-      .status(500)
-      .json({ success: false, error: "Error during login" });
+    return res.status(500).json({ success: false, error: "Error during login" });
   }
 });
 
