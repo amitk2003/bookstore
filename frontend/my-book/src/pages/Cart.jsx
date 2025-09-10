@@ -44,9 +44,10 @@ export default function Cart() {
       <div className='w-full md:w-auto'>
         <h1 className="text-2xl text-zinc-100 font-semibold text-start mt-2 md:mt-0">{item.title}</h1>
         <p className="text-normal text-zinc-300 mt-2 hidden lg:block">{item.desc.slice(0,100)}</p>
-         <p className="text-normal text-zinc-300 mt-2 hidden lg:block">{item.desc.slice(0,50)}</p>
-          <p className="text-normal text-zinc-300 mt-2 hidden lg:block">{item.desc.slice(0,70)}</p>
+         <p className="text-normal text-zinc-300 mt-2 hidden md:block lg:hidden">{n.desc.slice(0,50)}</p>
+          <p className="text-normal text-zinc-300 mt-2 block md:hidden">{item.desc.slice(0,100)}</p>
       </div>
+      <div></div>
     </div>  
    
     ))}
