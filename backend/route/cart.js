@@ -65,10 +65,10 @@ cart_route.get("/get-user-cart", authToken, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const cart_data = userData.cart.reverse(); // latest first
+    // const cart_data = userData.cart.reverse(); // latest first
     return res.json({
       status: "success",
-      data: cart_data,
+      data: userData.cart,
     });
   } catch (error) {
     console.error(error);
