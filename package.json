@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "crypto": "^1.0.1",
-    "framer-motion": "^12.23.12",
-    "nodemailer": "^6.10.0"
-  }
-}
